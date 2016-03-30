@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Templates</title>
+
+  	<!-- Bootstrap -->
+  	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+  	<!-- Reset elements -->
+  	<link rel="stylesheet" href="reset.css" type="text/css">
+
+  	<!-- Font Awesome -->
+  	<link rel="stylesheet" href="http://demo-institut.myoxxone.fr/desktop/utils/css/font-awesome-4.5.0/css/font-awesome.min.css" type="text/css" media="screen" />
+  	
+  	<!-- Custom stylesheet -->
+  	<link rel="stylesheet" id="theme" type="text/css">
+  	<link rel="stylesheet" href="http://demo-institut.myoxxone.fr/desktop/css/custom.css" type="text/css">
+
+  	<!-- Template element -->
+  	<link rel="stylesheet" href="template.css" type="text/css">
+
+  </head>
+  <body class="desktop">
+
+  	<div class="settings">
+	  	<div class="input-group">
+	  		<select id="templates" class="form-control"></select>
+	  		<div class="input-group-btn">
+		  		<button id="copy" class="btn btn-primary" data-clipboard-target="#templateContent">
+				    Copier
+				</button>
+			</div>
+	  	</div>
+  	</div>
+
+  	<textarea id="templateContent"></textarea>
+
+  	<div id="viewport" class="prestations content" style="padding-bottom: 20px">
+  		<div class="description">
+  			<div id="template">
+
+  			</div>
+  		</div>
+  	</div>
+
+  	<div class="settings" style="text-align: center">
+	  	<button class="btn btn-primary" onclick="App.setViewport('desktop', 984)">PC (page standard)</button>
+	  	<button class="btn btn-primary" onclick="App.setViewport('desktop', 715)">PC (page présentation)</button>
+	  	<button class="btn btn-primary" onclick="App.setViewport('mobile', 320)">Mobile</button>
+  	</div>
+
+  	<div id="ox_lightbox">
+		<div id="ox_lightbox_close">fermer x</div>
+		<div id="ox_lightbox_title"></div>
+	</div>
+
+	<div id="ox_lightbox_layer"></div>
+
+  	<!-- scripts -->
+  	<script src="https://code.jquery.com/jquery-2.2.2.min.js" integrity="sha256-36cp2Co+/62rEAAYHLmRCPIych47CvdM+uTBJwSzWjI=" crossorigin="anonymous"></script>
+  	<script src="clipboard.min.js"></script>
+
+  	<script type="text/javascript" src="http://demo-institut.myoxxone.fr/desktop/utils/js/lightbox.js"></script>
+
+  	<script>
+  	$(function()
+  	{
+  		App = 
+  		{
+  			themes: ['candystore'],
+  			templates: 
+  			[
+				{
+					value: 'galerie_1', 
+					description: 'Galerie d\'images 9 vignettes + citation'
+				},
+				{
+					value: 'galerie_2', 
+					description: 'Galerie d\'images 15 vignettes + bandeau'
+				},
+				{
+					value: 'produit_1', 
+					description: 'Descriptif produit ou service + arguments'
+				},
+        {
+          value: 'produit_2', 
+          description: 'Navigation pour produits et/ou services'
+        },
+        {
+          value: 'about_1', 
+          description: 'Page qui sommes-nous ?'
+        },
+        {
+          value: 'about_2', 
+          description: 'Page qui sommes-nous ? (version 2)'
+        },
+        {
+          value: 'utils_1', 
+          description: 'Page avec zone de liens sur la droite'
+        },
+        {
+          value: 'utils_2', 
+          description: 'Page avec zone de liens sur la gauche'
+        },
+        {
+          value: 'utils_3', 
+          description: 'Page avec zone d\'informations sur la droite, photo et citation'
+        }
+  			],
+
+  			loadTemplate: function(template)
+  			{
+  				$.get('templates/' + template + '.html', function(data) 
+  				{
+					$('#template').html(data);
+					$('#templateContent').val(data);
+
+					// Reload light box
+					$('img.ox_lightbox').each(function(index, value)
+					{
+						$(value).on('click', function()
+						{
+							LightBox.open($(this));
+						});
+					});
+				});
+  			},
+
+  			loadTheme: function(theme)
+  			{
+  				var oldlink = document.getElementById("theme");
+
+			    var newlink = document.createElement("link");
+			    newlink.setAttribute("id", "theme");
+			    newlink.setAttribute("rel", "stylesheet");
+			    newlink.setAttribute("type", "text/css");
+			    newlink.setAttribute("href", 'http://demo-institut.myoxxone.fr/themes/' + theme + '/desktop/css/main.css');
+
+			    document.getElementsByTagName("head").item(0).replaceChild(newlink, oldlink);
+  			},
+
+  			loadSettings : function()
+  			{
+  				// Generate options
+  				var templates = document.getElementById('templates');
+
+  				for (var i = 0; i<this.templates.length; i++)
+  				{
+				    var option = document.createElement('option');
+				    
+				    option.value = this.templates[i].value;
+				    option.innerHTML = this.templates[i].description;
+				    
+				    templates.appendChild(option);
+				}
+
+				$('#templates').change(function()
+				{
+					$("#templates option:selected").each(function() 
+					{
+						App.loadTemplate(this.value);
+					});
+				});
+  			},
+
+  			setViewport: function(device, w)
+  			{
+  				$('body')[0].className = device;
+  				$('#viewport').width(w);
+  			},
+
+  			init: function()
+  			{
+  				this.loadSettings();
+
+  				this.loadTheme(this.themes[0]);
+  				this.loadTemplate(this.templates[0].value);
+
+  				new Clipboard('#copy');
+  			}
+  		};
+
+  		App.init();
+  	});
+  	</script>
+  </body>
+</html>

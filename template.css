@@ -1,0 +1,31 @@
+html, body
+{
+	background: #f1f1f1;
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+
+.content
+{
+	background: #fff;
+	margin: auto;
+	min-height: 500px;
+    padding: 0 20px;
+    position: relative;
+    width: 984px;
+}
+
+.settings
+{
+	margin: 30px auto;
+    padding: 0 20px;
+    position: relative;
+    width: 984px;
+}
+
+#templateContent
+{
+	height: 0;
+    position: absolute;
+    left: -999999px;
+	width: 0;
+}
