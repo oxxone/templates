@@ -115,6 +115,10 @@
             description: 'Navigation pour produits et/ou services (variante)'
           },
           {
+            value: 'produit_4', 
+            description: 'Fiche produit en accordéon'
+          },
+          {
             value: 'about_1', 
             description: 'Page qui sommes-nous ?'
           },
@@ -152,18 +156,18 @@
   			{
   				$.get('templates/' + template + '.html', function(data) 
   				{
-					$('#template').html(data);
-					$('#templateContent').val(data);
+  					$('#template').html(data);
+  					$('#templateContent').val(data);
 
-					// Reload light box
-					$('img.ox_lightbox').each(function(index, value)
-					{
-						$(value).on('click', function()
-						{
-							LightBox.open($(this));
-						});
-					});
-				});
+  					// Reload light box
+  					$('img.ox_lightbox').each(function(index, value)
+  					{
+  						$(value).on('click', function()
+  						{
+  							LightBox.open($(this));
+  						});
+  					});
+  				});
   			},
 
   			loadTheme: function(theme)
